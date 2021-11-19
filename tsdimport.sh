@@ -17,7 +17,10 @@ jwtfile=/tmp/USERNAME_jwt
 
 usage() {
   printf "usage: $(basename $0) -u user [-p project] [-g group] file\n"
-  printf "  remove '${jwtfile}' to reauthenticate\n"
+  printf " -u username TSD username\n"
+  printf " -p project  TSD project\n"
+  printf " -g group    TSD group; default: pXX-member-group\n"
+  printf " remove '${jwtfile}' to reauthenticate\n"
 }
 
 argument_error() {
@@ -51,6 +54,10 @@ while [[ $# -gt 0 ]]; do
       inp_project=$2
       shift
       shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
       ;;
     *)
       break
@@ -125,4 +132,4 @@ echo "$r"
 # check response
 { echo "${r}" | jq -e '.message | test("data streamed")'; } || { printf "error: couldn't upload file\n\n" >&2; exit 1; }
 
-echo
+echo ok
